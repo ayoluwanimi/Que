@@ -138,7 +138,7 @@ export const SEO_DEFAULTS = {
     'property investment',
   ],
   ogImage: '/images/og-default.jpg',
-} as const;
+};
 
 export const CONTACT_PREFERENCES = [
   { value: 'email', label: 'Email' },

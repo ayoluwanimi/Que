@@ -5,8 +5,10 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
+    "export": "next export",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "build:netlify": "next build && next export"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.7",
@@ -14,6 +16,7 @@
     "date-fns": "^4.1.0",
     "decap-cms-app": "^3.8.3",
     "framer-motion": "^12.23.12",
+    "gray-matter": "^4.0.3",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.539.0",
     "next": "15.4.6",

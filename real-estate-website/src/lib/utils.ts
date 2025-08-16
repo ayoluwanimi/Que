@@ -99,7 +99,7 @@ export function formatPhoneNumber(phone: string): string {
   return phone;
 }
 
-export function generatePropertySchema(property: any) {
+export function generatePropertySchema(property: import('../types/property').Property) {
   return {
     '@context': 'https://schema.org',
     '@type': 'RealEstateListing',
@@ -134,13 +134,13 @@ export function generatePropertySchema(property: any) {
   };
 }
 
-export function debounce<T extends (...args: any[]) => any>(
+export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
   delay: number
 ): (...args: Parameters<T>) => void {
   let timeoutId: NodeJS.Timeout;
   return (...args: Parameters<T>) => {
     clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => func.apply(null, args), delay);
+    timeoutId = setTimeout(() => func(...args), delay);
   };
 }
