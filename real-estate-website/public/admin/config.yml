@@ -1,0 +1,294 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "public/images/uploads"
+public_folder: "/images/uploads"
+
+site_url: "https://your-site.netlify.app"
+display_url: "https://your-site.netlify.app"
+
+collections:
+  # Properties Collection
+  - name: "properties"
+    label: "Properties"
+    folder: "content/properties"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Slug", name: "slug", widget: "string", pattern: ['^[a-z0-9]+(?:-[a-z0-9]+)*$', 'A slug can have no spaces or special characters'] }
+      - { label: "Property Type", name: "propertyType", widget: "select", options: ["house", "land", "commercial"] }
+      - { label: "Listing Type", name: "listingType", widget: "select", options: ["sale", "rent"] }
+      - { label: "Price", name: "price", widget: "number", min: 0 }
+      - { label: "Description", name: "description", widget: "text" }
+      - { label: "Status", name: "status", widget: "select", options: ["active", "pending", "sold", "withdrawn"], default: "active" }
+      - { label: "Featured Property", name: "isFeatured", widget: "boolean", default: false }
+      - { label: "New Listing", name: "isNew", widget: "boolean", default: true }
+      
+      # Location
+      - label: "Location"
+        name: "location"
+        widget: "object"
+        fields:
+          - { label: "Address", name: "address", widget: "string" }
+          - { label: "City", name: "city", widget: "string" }
+          - { label: "State", name: "state", widget: "string" }
+          - { label: "ZIP Code", name: "zipCode", widget: "string" }
+          - label: "Coordinates"
+            name: "coordinates"
+            widget: "object"
+            fields:
+              - { label: "Latitude", name: "lat", widget: "number", step: 0.000001 }
+              - { label: "Longitude", name: "lng", widget: "number", step: 0.000001 }
+
+      # Property Features
+      - label: "Features"
+        name: "features"
+        widget: "object"
+        fields:
+          - { label: "Bedrooms", name: "bedrooms", widget: "number", min: 0, required: false }
+          - { label: "Bathrooms", name: "bathrooms", widget: "number", step: 0.5, min: 0, required: false }
+          - { label: "Square Feet", name: "squareFeet", widget: "number", min: 0, required: false }
+          - { label: "Lot Size (sq ft)", name: "lotSize", widget: "number", min: 0, required: false }
+          - { label: "Parking Spaces", name: "parkingSpaces", widget: "number", min: 0, required: false }
+          - { label: "Year Built", name: "yearBuilt", widget: "number", min: 1800, max: 2030, required: false }
+          - { label: "Property Tax (annual)", name: "propertyTax", widget: "number", min: 0, required: false }
+          - { label: "HOA Fees (monthly)", name: "hoaFees", widget: "number", min: 0, required: false }
+
+      # Amenities
+      - label: "Amenities"
+        name: "amenities"
+        widget: "list"
+        allow_add: true
+        field: { label: "Amenity", name: "amenity", widget: "string" }
+
+      # Images
+      - label: "Featured Image"
+        name: "featuredImage"
+        widget: "object"
+        fields:
+          - { label: "Image", name: "src", widget: "image" }
+          - { label: "Alt Text", name: "alt", widget: "string" }
+          - { label: "Caption", name: "caption", widget: "string", required: false }
+
+      - label: "Property Images"
+        name: "images"
+        widget: "list"
+        fields:
+          - { label: "Image", name: "src", widget: "image" }
+          - { label: "Alt Text", name: "alt", widget: "string" }
+          - { label: "Caption", name: "caption", widget: "string", required: false }
+
+      # Agent
+      - label: "Agent"
+        name: "agent"
+        widget: "relation"
+        collection: "agents"
+        search_fields: ["name"]
+        value_field: "{{slug}}"
+        display_fields: ["name", "title"]
+
+      # SEO
+      - label: "SEO"
+        name: "seo"
+        widget: "object"
+        collapsed: true
+        fields:
+          - { label: "Meta Title", name: "metaTitle", widget: "string", required: false }
+          - { label: "Meta Description", name: "metaDescription", widget: "text", required: false }
+          - label: "Keywords"
+            name: "keywords"
+            widget: "list"
+            allow_add: true
+            field: { label: "Keyword", name: "keyword", widget: "string" }
+
+  # Agents Collection
+  - name: "agents"
+    label: "Agents"
+    folder: "content/agents"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Name", name: "name", widget: "string" }
+      - { label: "Slug", name: "slug", widget: "string", pattern: ['^[a-z0-9]+(?:-[a-z0-9]+)*$', 'A slug can have no spaces or special characters'] }
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Email", name: "email", widget: "string" }
+      - { label: "Phone", name: "phone", widget: "string" }
+      - { label: "Bio", name: "bio", widget: "text" }
+      - { label: "License Number", name: "license", widget: "string", required: false }
+      - { label: "Years of Experience", name: "yearsExperience", widget: "number", min: 0 }
+      
+      # Photo
+      - label: "Profile Image"
+        name: "image"
+        widget: "object"
+        fields:
+          - { label: "Image", name: "src", widget: "image" }
+          - { label: "Alt Text", name: "alt", widget: "string" }
+
+      # Specialties
+      - label: "Specialties"
+        name: "specialties"
+        widget: "list"
+        allow_add: true
+        field: { label: "Specialty", name: "specialty", widget: "string" }
+
+      # Social Media
+      - label: "Social Media"
+        name: "social"
+        widget: "object"
+        collapsed: true
+        fields:
+          - { label: "LinkedIn", name: "linkedin", widget: "string", required: false }
+          - { label: "Facebook", name: "facebook", widget: "string", required: false }
+          - { label: "Instagram", name: "instagram", widget: "string", required: false }
+          - { label: "Twitter", name: "twitter", widget: "string", required: false }
+
+  # Blog Posts Collection
+  - name: "blog"
+    label: "Blog Posts"
+    folder: "content/blog"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Slug", name: "slug", widget: "string", pattern: ['^[a-z0-9]+(?:-[a-z0-9]+)*$', 'A slug can have no spaces or special characters'] }
+      - { label: "Excerpt", name: "excerpt", widget: "text" }
+      - { label: "Content", name: "content", widget: "markdown" }
+      - { label: "Published Date", name: "publishedAt", widget: "datetime" }
+      - { label: "Status", name: "status", widget: "select", options: ["draft", "published", "archived"], default: "draft" }
+      - { label: "Featured Post", name: "isFeatured", widget: "boolean", default: false }
+      
+      # Featured Image
+      - label: "Featured Image"
+        name: "featuredImage"
+        widget: "object"
+        required: false
+        fields:
+          - { label: "Image", name: "src", widget: "image" }
+          - { label: "Alt Text", name: "alt", widget: "string" }
+          - { label: "Caption", name: "caption", widget: "string", required: false }
+
+      # Author
+      - label: "Author"
+        name: "author"
+        widget: "relation"
+        collection: "authors"
+        search_fields: ["name"]
+        value_field: "{{slug}}"
+        display_fields: ["name"]
+
+      # Category
+      - label: "Category"
+        name: "category"
+        widget: "select"
+        options:
+          - { label: "Market Updates", value: "market-updates" }
+          - { label: "Buying Guide", value: "buying-guide" }
+          - { label: "Selling Tips", value: "selling-tips" }
+          - { label: "Investment", value: "investment" }
+          - { label: "Neighborhoods", value: "neighborhood" }
+          - { label: "Legal & Finance", value: "legal" }
+
+      # Tags
+      - label: "Tags"
+        name: "tags"
+        widget: "list"
+        allow_add: true
+        field: { label: "Tag", name: "tag", widget: "string" }
+
+      # SEO
+      - label: "SEO"
+        name: "seo"
+        widget: "object"
+        collapsed: true
+        fields:
+          - { label: "Meta Title", name: "metaTitle", widget: "string", required: false }
+          - { label: "Meta Description", name: "metaDescription", widget: "text", required: false }
+          - label: "Keywords"
+            name: "keywords"
+            widget: "list"
+            allow_add: true
+            field: { label: "Keyword", name: "keyword", widget: "string" }
+
+  # Authors Collection
+  - name: "authors"
+    label: "Authors"
+    folder: "content/authors"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Name", name: "name", widget: "string" }
+      - { label: "Slug", name: "slug", widget: "string", pattern: ['^[a-z0-9]+(?:-[a-z0-9]+)*$', 'A slug can have no spaces or special characters'] }
+      - { label: "Bio", name: "bio", widget: "text" }
+      - { label: "Email", name: "email", widget: "string", required: false }
+      
+      # Avatar
+      - label: "Avatar"
+        name: "avatar"
+        widget: "object"
+        fields:
+          - { label: "Image", name: "src", widget: "image" }
+          - { label: "Alt Text", name: "alt", widget: "string" }
+
+      # Social Media
+      - label: "Social Media"
+        name: "social"
+        widget: "object"
+        collapsed: true
+        fields:
+          - { label: "LinkedIn", name: "linkedin", widget: "string", required: false }
+          - { label: "Facebook", name: "facebook", widget: "string", required: false }
+          - { label: "Instagram", name: "instagram", widget: "string", required: false }
+          - { label: "Twitter", name: "twitter", widget: "string", required: false }
+
+  # Site Settings
+  - name: "settings"
+    label: "Site Settings"
+    files:
+      - label: "General Settings"
+        name: "general"
+        file: "content/settings/general.md"
+        fields:
+          - { label: "Site Name", name: "siteName", widget: "string" }
+          - { label: "Site Description", name: "siteDescription", widget: "text" }
+          - { label: "Site URL", name: "siteUrl", widget: "string" }
+          - { label: "Company Name", name: "companyName", widget: "string" }
+          - { label: "Company Phone", name: "companyPhone", widget: "string" }
+          - { label: "Company Email", name: "companyEmail", widget: "string" }
+          
+          # Company Address
+          - label: "Company Address"
+            name: "companyAddress"
+            widget: "object"
+            fields:
+              - { label: "Street", name: "street", widget: "string" }
+              - { label: "City", name: "city", widget: "string" }
+              - { label: "State", name: "state", widget: "string" }
+              - { label: "ZIP Code", name: "zipCode", widget: "string" }
+
+          # Social Media
+          - label: "Social Media"
+            name: "social"
+            widget: "object"
+            fields:
+              - { label: "Facebook", name: "facebook", widget: "string", required: false }
+              - { label: "Instagram", name: "instagram", widget: "string", required: false }
+              - { label: "Twitter", name: "twitter", widget: "string", required: false }
+              - { label: "LinkedIn", name: "linkedin", widget: "string", required: false }
+              - { label: "YouTube", name: "youtube", widget: "string", required: false }
+
+          # SEO Settings
+          - label: "SEO"
+            name: "seo"
+            widget: "object"
+            fields:
+              - { label: "Default Meta Title", name: "defaultMetaTitle", widget: "string" }
+              - { label: "Default Meta Description", name: "defaultMetaDescription", widget: "text" }
+              - label: "Default Keywords"
+                name: "keywords"
+                widget: "list"
+                allow_add: true
+                field: { label: "Keyword", name: "keyword", widget: "string" }
+              - { label: "Default OG Image", name: "ogImage", widget: "image" }
